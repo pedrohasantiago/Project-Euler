@@ -35,7 +35,7 @@ def highest_prime_factor(num):
             for i in loopable_factors:
                 new_factors = factors_when_not_cousin(i)
                 if not new_factors: # If the new found factor is cousin,
-                    counter += 1 # ...add 1 for each prime factor.
+                    counter += 1    # ...add 1 for each prime factor.
                     continue
                 factors.remove(i) # We shouldn't loop through numbers
                                   # whose factors were already found.
