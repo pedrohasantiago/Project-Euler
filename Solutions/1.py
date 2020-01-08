@@ -1,3 +1,8 @@
+# If we list all the natural numbers below 10 that are multiples of 3 or
+# 5, we get 3, 5, 6 and 9. The sum of these multiples is 23. Find the
+# sum of all the multiples of 3 or 5 below 1000.
+# (Link: https://projecteuler.net/problem=1.)
+
 def sum_multiples_3_and_5(number):
     """Returns the sum of all multiples of 3 and 5 below a given number.
     """
@@ -14,3 +19,5 @@ def sum_multiples_3_and_5(number):
             pattern = (i for i in [2, 1, 3, 1, 2, 3, 3])
             counter += next(pattern)
     return sum
+
+print(sum_multiples_3_and_5(1000))
