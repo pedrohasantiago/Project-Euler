@@ -4,7 +4,7 @@
 # (Link: https://projecteuler.net/problem=4.)
 
 def highest_palindrome_product(digits):
-    """Returns the highes palindrome number resulting from the
+    """Returns the highest palindrome number resulting from the
     multiplication of two numbers with the given amount of digits.
     """
     def is_palindrome(target):
