@@ -47,4 +47,5 @@ def highest_prime_factor(num):
                                        # found factors.
     return max(factors)
 
-print(highest_prime_factor(600851475143))
+if __name__ == "__main__":
+    print(highest_prime_factor(600851475143))

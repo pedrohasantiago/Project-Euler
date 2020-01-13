@@ -20,4 +20,5 @@ def sum_multiples_3_and_5(number):
             counter += next(pattern)
     return sum
 
-print(sum_multiples_3_and_5(1000))
+if __name__ == "__main__":
+    print(sum_multiples_3_and_5(1000))

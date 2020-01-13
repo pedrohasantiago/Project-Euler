@@ -22,4 +22,5 @@ def smallest_evenly_divisible(min_divisor, max_divisor, minimum_dividend=0):
             return minimum_dividend 
         minimum_dividend += 1
 
-print(smallest_evenly_divisible(1, 20, 2520))
+if __name__ == "__main__":
+    print(smallest_evenly_divisible(1, 20, 2520))

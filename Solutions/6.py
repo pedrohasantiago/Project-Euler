@@ -17,4 +17,5 @@ def difference_sum_of_squares_square_of_sums(min, max):
     target = range(min, max+1)
     return sum(target)**2 - sum((i**2 for i in target))
 
-print(difference_sum_of_squares_square_of_sums(0, 100))
+if __name__ == "__main__":
+    print(difference_sum_of_squares_square_of_sums(0, 100))

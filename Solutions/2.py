@@ -22,4 +22,5 @@ def sum_even_fibonacci_terms(limit):
             sum += new_term
     return sum
 
-print(sum_even_fibonacci_terms(4000000))
+if __name__ == "__main__":
+    print(sum_even_fibonacci_terms(4000000))

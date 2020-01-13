@@ -32,4 +32,5 @@ def highest_palindrome_product(digits):
             highest_number2 -= 1
     return max(palindromes_list)
 
-print(highest_palindrome_product(3))
+if __name__ == "__main__":
+    print(highest_palindrome_product(3))
