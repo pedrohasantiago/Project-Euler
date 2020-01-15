@@ -6,7 +6,7 @@ from math import sqrt
 
 def nth_prime(n):
     """Returns the n-th prime number, considering that the first prime
-    number is 1.
+    number is 2.
     """
 
     def is_prime(j):
@@ -23,7 +23,7 @@ def nth_prime(n):
         return True
 
     counter = 1
-    prime = 2 # This is the counter-th prime.
+    prime = 2 # This is the `counter`-th prime.
     while counter < n:
         while True:
             prime += 1
