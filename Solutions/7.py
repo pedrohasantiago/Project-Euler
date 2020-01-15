@@ -5,16 +5,16 @@
 from math import sqrt
 
 def nth_prime(n):
-    """Returns the n-th prime number, considering that the first prime
+    """Return the n-th prime number, considering that the first prime
     number is 2.
     """
 
     def is_prime(j):
-        """Returns `True` if `j` is prime; `False` if not.
+        """Return `True` if `j` is prime; `False` if not.
         """
         # Loop through all numbers smaller than `j` and bigger than 1 to
-        # check if there is any divisor. Note that is is only necessary to
-        # loop through numbers smaller than the sqrt of `j`.
+        # check if there is any divisor. Note that is is only necessary
+        # to loop through numbers smaller than the sqrt of `j`.
         for i in range(int(sqrt(j)), 1, -1):
             # If there is any divisor, `j` is not prime: 
             if j % i == 0:
