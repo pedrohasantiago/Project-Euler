@@ -10,8 +10,7 @@ def nth_prime(n):
     """
 
     def is_prime(j):
-        """Return `True` if `j` is prime; `False` if not.
-        """
+        """Return `True` if `j` is prime; `False` if not."""
         # Loop through all numbers smaller than `j` and bigger than 1 to
         # check if there is any divisor. Note that is is only necessary
         # to loop through numbers smaller than the sqrt of `j`.
