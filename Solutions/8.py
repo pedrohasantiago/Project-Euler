@@ -28,7 +28,7 @@ def greatest_product_of_adjacent_digits(stream, num):
     """
     init = 0
     higher_product = 0
-    while init+num <= len(stream)+1:
+    while init+num <= len(stream):
         current_product = reduce(lambda x, y: int(x)*int(y),
                                  stream[init : init+num])
         if current_product > higher_product: higher_product = current_product
