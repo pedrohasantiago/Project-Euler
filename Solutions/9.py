@@ -48,18 +48,20 @@ def find_pythagorian_triplet(abc_sum, only_natural=False):
 
     # We will replace any m_n_pair in our definitions for a, b and c. If
     # we do not care about a, b and c being positive or not:
+    triplets = [(2*m*n, m**2-n**2, m**2+n**2) for m, n in m_n_pairs]
     if only_natural == False:
-        return [(2*m*n, m**2-n**2, m**2+n**2) for m, n in m_n_pairs]
+        return triplets
     # Or, considering that a, b and c are all natural and, consequently,
     # all > 0. We do not have to check if c > 0, as "m**2 + n**2" is
     # always > 0 if m**2 - n**2 > 0.
     else:
-        return [(2*m*n, m**2-n**2, m**2+n**2) for m, n in m_n_pairs
-                if 2*m*n > 0 and m**2-n**2 > 0]
+        return list(filter(lambda triplet: triplet[0] > 0 and triplet[1] > 0,
+                           triplets))
 
 if __name__ == "__main__":
-    from functools import reduce
+    # from functools import reduce
 
-    triplets = find_pythagorian_triplet(1000, only_natural=True)
-    for triplet in triplets:
-        print(reduce((lambda x, y: x*y), triplet))
+    # triplets = find_pythagorian_triplet(1000, only_natural=True)
+    # for triplet in triplets:
+    #     print(reduce((lambda x, y: x*y), triplet))
+    print(find_pythagorian_triplet(1000))
