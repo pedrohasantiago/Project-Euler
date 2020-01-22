@@ -59,8 +59,8 @@ def find_pythagorian_triplet(abc_sum, only_natural=False):
                            triplets))
 
 if __name__ == "__main__":
-    from functools import reduce
+    from math import prod
 
     triplets = find_pythagorian_triplet(1000, only_natural=True)
     for triplet in triplets:
-        print(reduce((lambda x, y: x*y), triplet))
+        print(prod(triplet))

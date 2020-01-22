@@ -19,7 +19,7 @@
 # the greatest product. What is the value of this product?
 # (Link: https://projecteuler.net/problem=8.)
 
-from functools import reduce
+from math import prod
 
 def greatest_product_of_adjacent_digits(stream, num):
     """Return the highest product of "num" adjacent integers in a
@@ -29,8 +29,7 @@ def greatest_product_of_adjacent_digits(stream, num):
     init = 0
     higher_product = 0
     while init+num <= len(stream):
-        current_product = reduce(lambda x, y: int(x)*int(y),
-                                 stream[init : init+num])
+        current_product = prod([int(x) for x in stream[init : init+num]])
         if current_product > higher_product: higher_product = current_product
         init += 1
     return higher_product
