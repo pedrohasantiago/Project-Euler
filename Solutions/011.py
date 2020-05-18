@@ -29,6 +29,7 @@
 
 from math import prod
 from functools import partial
+from itertools import islice
 
 def greatest_product_of_adjacent_digits(stream, digits_in_num,
                                         adjacent_numbers):
@@ -73,30 +74,36 @@ def greatest_product_of_adjacent_digits(stream, digits_in_num,
         """Traverse the stream diagonally (both ascending and
         descending).
         """
-        def traverse(stream, descending=True):
-            highest_product = float('-inf')
-            direction = 1 if descending is True else -1
-            for line in range(GRID_SIZE):
-                while (col_slice := line + adjacent_numbers) <= GRID_SIZE:
-                    init = 0
-                    while (row_slice := init + adjacent_numbers) <= GRID_SIZE:
-                        selected_lines = (line[::direction]
-                                          for line in stream[line:col_slice])
-                        selected_numbers = [
-                            line[next(i for i in range(init, row_slice))]
-                            for line in selected_lines
-                        ]
-                        current_product = highest_product_in_selection(
-                            selected_numbers, adjacent_numbers
-                        )
-                        highest_product = max(highest_product, current_product)
-                        init += 1
-                    line += 1
+        def traverse_diagonally_given_direction(stream, descending, max_val):
+            minuend = 0 if descending is True else GRID_SIZE - 1
+            highest_product = float("-inf")
+            for init in range(GRID_SIZE):
+                if (init <= max_val) and (GRID_SIZE - init >= adjacent_numbers):
+                    selection = []
+                    for i, line in zip(range(init, init + GRID_SIZE), stream):
+                        if (descending and minuend - i <= 0
+                            or not descending and minuend - i >=0):
+                            try:
+                                selection.append(line[abs(minuend - i)])
+                            except IndexError:
+                                break
+                    highest_product = max(
+                        highest_product,
+                        highest_product_in_selection(selection,
+                                                     adjacent_numbers)
+                    )
             return highest_product
-
-        traverse_stream = partial(traverse, stream=stream)
-        return max(traverse_stream(descending=True),
-                   traverse_stream(descending=False))
+        
+        highest_product = float('-inf')
+        for i in range(GRID_SIZE):
+            max_val = 0 if i != 0 else float('inf')
+            sliced_stream = list(islice(stream, i, None))
+            traverse_stream = partial(traverse_diagonally_given_direction,
+                                      stream=sliced_stream, max_val=max_val)
+            highest_product = max(traverse_stream(descending=True),
+                                  traverse_stream(descending=False))
+        return highest_product
+        
 
     # Parsing the stream into an iterable of iterables
     # First, by creating an iterable of "digits_in_num"-digit numbers.
@@ -134,5 +141,5 @@ if __name__ == "__main__":
               "0442167338253911249472180846293240627636\n"
               "2069364172302388346299698267598574043616\n"
               "2073352978319001743149714886811623570554\n"
-              "0170547183515469169233486143520189196748")
+              "0170547183515469169233486143520189196748\n")
     print(greatest_product_of_adjacent_digits(stream, 2, 4))
