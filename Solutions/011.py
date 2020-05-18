@@ -32,10 +32,20 @@ from functools import partial
 from itertools import islice
 
 def greatest_product_of_adjacent_digits(stream, digits_in_num,
-                                        adjacent_numbers):
-    """Return the highest product of "adjacent_numbers" adjacent (either up, down,
-    left, right, or diagonally) integers in a sliceable "stream" (a string of numbers
-    with lines delimited by newlines; the number of lines and numbers in each line should be the same).
+                                        adjacent_numbers, modes):
+    """Return the highest product of "adjacent_numbers" adjacent
+    integers in a sliceable "stream".
+    
+    The "stream" should be a string of numbers with lines delimited by
+    newlines; the number of lines and numbers in each line should be the
+    same. The number of digits in each number is defined by
+    "digits_in_num" (e.g.: if "digits_in_num" is 2 and the stream starts
+    with "020455", the first numbers would be 2, 4 and 55).
+
+    The adjacent integers are selected according to the modes passed in
+    "modes": horizontally, vertically, and diagonally. When the stream
+    is traversed diagonally, both directions (ascending and descending)
+    are considered.
     """
     def get_grid_size(stream, digits_in_num):
         digits_in_line = len(stream.split('\n')[0])
@@ -56,7 +66,8 @@ def greatest_product_of_adjacent_digits(stream, digits_in_num,
         """
         highest_product = float("-inf")
         for line in stream:
-            current_product = highest_product_in_selection(line, adjacent_numbers)
+            current_product = highest_product_in_selection(line,
+                                                           adjacent_numbers)
             highest_product = max(highest_product, current_product)
         return highest_product
 
@@ -66,7 +77,7 @@ def greatest_product_of_adjacent_digits(stream, digits_in_num,
         for column in range(GRID_SIZE):
             selection = [row[column] for row in stream]
             current_product = highest_product_in_selection(selection, 
-                                                          adjacent_numbers)
+                                                           adjacent_numbers)
             highest_product = max(highest_product, current_product)
         return highest_product
 
@@ -78,7 +89,7 @@ def greatest_product_of_adjacent_digits(stream, digits_in_num,
             minuend = 0 if descending is True else GRID_SIZE - 1
             highest_product = float("-inf")
             for init in range(GRID_SIZE):
-                if (init <= max_val) and (GRID_SIZE - init >= adjacent_numbers):
+                if init <= max_val and (GRID_SIZE - init) >= adjacent_numbers:
                     selection = []
                     for i, line in zip(range(init, init + GRID_SIZE), stream):
                         if (descending and minuend - i <= 0
@@ -100,8 +111,11 @@ def greatest_product_of_adjacent_digits(stream, digits_in_num,
             sliced_stream = list(islice(stream, i, None))
             traverse_stream = partial(traverse_diagonally_given_direction,
                                       stream=sliced_stream, max_val=max_val)
-            highest_product = max(traverse_stream(descending=True),
-                                  traverse_stream(descending=False))
+            highest_product = max(
+                highest_product,
+                max(traverse_stream(descending=True),
+                    traverse_stream(descending=False))
+            )
         return highest_product
         
 
@@ -114,12 +128,17 @@ def greatest_product_of_adjacent_digits(stream, digits_in_num,
     stream_agg_ints = [int(stream_no_breaks[i:i + digits_in_num])
                        for i in range(0, len(stream_no_breaks), digits_in_num)]
     stream_split_into_lines = [stream_agg_ints[i:i + GRID_SIZE]
-                               for i in range(0, len(stream_agg_ints), GRID_SIZE)]
+                               for i
+                               in range(0, len(stream_agg_ints), GRID_SIZE)]
+
+    modes_dict = {
+        'horizontally': traverse_horizontally,
+        'vertically': traverse_vertically,
+        'diagonally': traverse_diagonally
+    }
 
     return max(func(stream_split_into_lines)
-               for func in (traverse_horizontally,
-                            traverse_vertically,
-                            traverse_diagonally))
+               for func in (modes_dict[mode] for mode in modes))
 
 if __name__ == "__main__":
     stream = ("0802229738150040007504050778521250779108\n"
@@ -142,4 +161,9 @@ if __name__ == "__main__":
               "2069364172302388346299698267598574043616\n"
               "2073352978319001743149714886811623570554\n"
               "0170547183515469169233486143520189196748\n")
-    print(greatest_product_of_adjacent_digits(stream, 2, 4))
+    print(greatest_product_of_adjacent_digits(
+        stream=stream,
+        digits_in_num=2,
+        adjacent_numbers=4,
+        modes=['diagonally']
+    ))
