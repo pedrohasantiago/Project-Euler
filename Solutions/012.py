@@ -4,41 +4,47 @@
 # (Link: https://projecteuler.net/problem=12)
 
 from math import sqrt
-from typing import Iterable, List
+from typing import Iterable
+import numpy as np
 
-def _triangle_number_iterator() -> Iterable[int]:
-    curr = 2
+def _generate_triangle_number() -> Iterable[int]:
+    curr = 1
     while True:
-        yield sum(range(curr))
+        # The n-th triangular number is the sum of all integers until n,
+        # so it is basically a arithmetic projection of ratio 1:
+        yield curr * (curr + 1) // 2
         curr += 1
 
-def _sieve_of_erastothenes(limit: int) -> Iterable[int]:
-    # Taken from https://stackoverflow.com/a/3941967/12058106
-    # Initialize list with highest index = limit
-    is_index_prime: List[bool] = ([False] * 2) + ([True] * (limit - 1))
-    is_index_prime[0] = is_index_prime[1] = False # 0 and 1 arent primes
-    # Iterate on list; return if prime
-    for i, is_prime in enumerate(is_index_prime):
-        if is_prime:
-            yield i
+def _sieve_of_erastothenes(limit: int) -> np.ndarray:
+    # Taken from https://stackoverflow.com/a/3035188/12058106
+    if limit < 2:
+        return []
+    limit += 1 # Including "limit" itself in the range
+    # Initialize half sieve
+    is_index_prime = np.ones(limit // 2, dtype=np.bool)
+    # Iterate on sieve
+    for i in range(3, int(sqrt(limit)) + 1, 2):
+        if is_index_prime[i // 2]:
             # Cut off non-primes
-            if i == 2:
-                step = i
-            else:
-                step = 2*i # No need to iterate on even numbers again
-            for not_prime in range(i * i, limit, step):
-                is_index_prime[not_prime] = False
+            is_index_prime[i * i // 2 :: i] = False
+    return np.insert(
+        arr=2 * np.nonzero(is_index_prime)[0][1:] + 1,
+        obj=0,
+        values=2
+    )
 
 def _divisor_function(num: int) -> int:
     # Inspired by https://www.geeksforgeeks.org/count-divisors-n-on13/
     divisors = 1 # All numbers have at least 1 divisor (1)
     for prime in _sieve_of_erastothenes(limit=num):
+        if prime > num:
+            break
         # Is divisor?
         if num % prime == 0:
             # If divisor, what is the highest power to get to num?
             power = 0
             while num % prime == 0:
-                num = int(num / prime)
+                num = num // prime
                 power += 1
             # If n = 1**u_1 * 2**u_2 * 3**u_3 ... p**u_r,
             # The number of divisors is
@@ -47,7 +53,7 @@ def _divisor_function(num: int) -> int:
     return divisors
 
 def get_triangle_number(more_than_many_divisors: int) -> int:
-    for triangle_num in _triangle_number_iterator():
+    for triangle_num in _generate_triangle_number():
         if _divisor_function(triangle_num) > more_than_many_divisors:
             return triangle_num
     assert False, "Unreachable"
