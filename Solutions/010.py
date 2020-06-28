@@ -19,7 +19,7 @@ def sum_of_primes_below(threshold):
         # Otherwise, `j` is prime:
         return True
 
-    return sum([i for i in range(2, threshold+1) if is_prime(i) == True])
+    return sum(i for i in range(2, threshold+1) if is_prime(i) == True)
 
 if __name__ == "__main__":
     print(sum_of_primes_below(2000000))
