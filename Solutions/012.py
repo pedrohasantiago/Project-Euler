@@ -6,6 +6,7 @@
 from math import sqrt, prod
 from functools import lru_cache
 from typing import Iterable
+import numpy as np
 
 FIRST_TRIANGLE_NUMBER = 1
 
